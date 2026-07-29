@@ -1,0 +1,76 @@
+resolver 127.0.0.11 ipv6=off valid=30s;
+
+# Preserve an existing Authorization header.
+# When Authorization is absent, translate x-api-key to Bearer authentication.
+map $http_x_api_key $api_key_authorization {
+    default "Bearer $http_x_api_key";
+    ""      "";
+}
+
+map $http_authorization $upstream_authorization {
+    default $http_authorization;
+    ""      $api_key_authorization;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name api.anthropic.com;
+
+    ssl_certificate     /etc/nginx/tls/api.anthropic.com.crt;
+    ssl_certificate_key /etc/nginx/tls/api.anthropic.com.key;
+
+    location /v1/ {
+        # The trailing slash in ANTHROPIC_UPSTREAM_URL is intentional.
+        #
+        # Incoming:
+        #   /v1/messages
+        #
+        # Upstream:
+        #   /enterpriseai/gateway/v1/messages
+        proxy_pass ${ANTHROPIC_UPSTREAM_URL};
+
+        proxy_http_version 1.1;
+
+        # Required for the upstream TLS virtual host.
+        proxy_set_header Host ${ANTHROPIC_UPSTREAM_HOST};
+        proxy_ssl_server_name on;
+        proxy_ssl_name ${ANTHROPIC_UPSTREAM_HOST};
+
+        # Remove hop-by-hop connection metadata.
+        proxy_set_header Connection "";
+
+        # Preserve Authorization when supplied.
+        # Otherwise translate Anthropic x-api-key into Bearer authentication.
+        proxy_set_header Authorization $upstream_authorization;
+        proxy_set_header x-api-key "";
+
+        # Preserve Anthropic protocol headers explicitly.
+        proxy_set_header anthropic-version $http_anthropic_version;
+        proxy_set_header anthropic-beta $http_anthropic_beta;
+        proxy_set_header Content-Type $http_content_type;
+        proxy_set_header Accept $http_accept;
+
+        # Optional diagnostic context for the upstream gateway.
+        proxy_set_header X-Original-Host $host;
+        proxy_set_header X-Original-URI $request_uri;
+
+        # Support Anthropic Server-Sent Events and long-running requests.
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_cache off;
+        gzip off;
+
+        # Prevent NGINX from adding buffering hints to SSE responses.
+        add_header X-Accel-Buffering no always;
+
+        proxy_connect_timeout 30s;
+        proxy_send_timeout 300s;
+        proxy_read_timeout 300s;
+    }
+
+    location / {
+        return 404;
+    }
+}

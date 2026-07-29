@@ -1,4 +1,5 @@
 name: nai-tutorials
+
 x-common-env-file: &common-env-file
   env_file:
     - path: ../.env
@@ -9,24 +10,48 @@ services:
     build:
       context: .
       dockerfile: opencode/Dockerfile
-    container_name: opencode
+
     entrypoint: ["/bin/sh", "-c"]
     command: ["while true; do sleep 3600; done"]
 
     volumes:
       - ..:/workspace:cached
+      - ./certificates/ca.crt:/usr/local/share/ca-certificates/nai-mitm-ca.crt:ro
 
     <<: *common-env-file
 
-    extra_hosts:
-      - "api.anthropic.com:172.29.0.10"
+    environment:
+      OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX: "8192"
+      NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/nai-mitm-ca.crt
+
+    networks:
+      - nai-dev-network
+
+    depends_on:
+      nginx:
+        condition: service_started
+
+  nginx:
+    image: nginx:1.29-alpine
+    restart: unless-stopped
+
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./certificates/api.anthropic.com.crt:/etc/nginx/tls/api.anthropic.com.crt:ro
+      - ./certificates/api.anthropic.com.key:/etc/nginx/tls/api.anthropic.com.key:ro
+
+    <<: *common-env-file
+
+    environment:
+      NGINX_ENVSUBST_FILTER: "^(ANTHROPIC_UPSTREAM_URL|ANTHROPIC_UPSTREAM_HOST)$"
+      ANTHROPIC_UPSTREAM_URL: "https://ai.hpoc.nutanix.com/enterpriseai/gateway/v1/"
+      ANTHROPIC_UPSTREAM_HOST: "ai.hpoc.nutanix.com"
 
     networks:
       nai-dev-network:
+        aliases:
+          - api.anthropic.com
 
 networks:
   nai-dev-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.29.0.0/24

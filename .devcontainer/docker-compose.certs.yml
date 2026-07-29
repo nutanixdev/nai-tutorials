@@ -1,0 +1,6 @@
+services:
+  certificate-generator:
+    build:
+      context: ./certificate-generator
+    volumes:
+      - ./certificates:/certificates

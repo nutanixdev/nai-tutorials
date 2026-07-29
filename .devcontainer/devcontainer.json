@@ -4,7 +4,8 @@
     "service": "opencode",
     "workspaceFolder": "/workspace",
     "runServices": [
-        "opencode"
+        "opencode",
+        "nginx"
     ],
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
@@ -16,5 +17,14 @@
             "upgradePackages": "true"
         }
     },
-    "remoteUser": "nutanix"
+    "remoteUser": "nutanix",
+    "initializeCommand": [
+        "docker",
+        "compose",
+        "-f",
+        ".devcontainer/docker-compose.certs.yml",
+        "run",
+        "--rm",
+        "certificate-generator"
+    ]
 }
