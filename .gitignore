@@ -1,2 +1,4 @@
 .env
 .DS_Store
+.devcontainer/certificates/*
+!.devcontainer/certificates/.gitkeep
