@@ -1,7 +1,8 @@
 name: nai-tutorials
 x-common-env-file: &common-env-file
   env_file:
-    - ../.env
+    - path: ../.env
+      required: false
 
 services:
   opencode:
