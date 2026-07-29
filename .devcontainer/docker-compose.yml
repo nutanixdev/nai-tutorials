@@ -14,12 +14,26 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command: ["while true; do sleep 3600; done"]
 
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    tmpfs:
+      - /tmp:rw,exec,nosuid,nodev,mode=1777
+      - /run:rw,nosuid,nodev,noexec
+      - /home/nutanix/.config:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.cache:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.local/share:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.local/state:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+
     volumes:
       - ..:/workspace:cached
       - ./certificates/ca.crt:/usr/local/share/ca-certificates/nai-mitm-ca.crt:ro
+      - vscode-server-data:/home/nutanix/.vscode-server
 
     <<: *common-env-file
-
     environment:
       OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX: "8192"
       NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/nai-mitm-ca.crt
@@ -55,3 +69,6 @@ services:
 networks:
   nai-dev-network:
     driver: bridge
+
+volumes:
+  vscode-server-data:
