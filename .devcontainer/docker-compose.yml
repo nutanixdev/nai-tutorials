@@ -1,0 +1,31 @@
+name: nai-tutorials
+x-common-env-file: &common-env-file
+  env_file:
+    - ../.env
+
+services:
+  opencode:
+    build:
+      context: .
+      dockerfile: opencode/Dockerfile
+    container_name: opencode
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["while true; do sleep 3600; done"]
+
+    volumes:
+      - ..:/workspace:cached
+
+    <<: *common-env-file
+
+    extra_hosts:
+      - "api.anthropic.com:172.29.0.10"
+
+    networks:
+      nai-dev-network:
+
+networks:
+  nai-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24

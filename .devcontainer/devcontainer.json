@@ -1,0 +1,20 @@
+{
+    "name": "NAI Tutorials",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "opencode",
+    "workspaceFolder": "/workspace",
+    "runServices": [
+        "opencode"
+    ],
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "version": "2.5.9",
+            "installZsh": "true",
+            "username": "nutanix",
+            "userUid": "1000",
+            "userGid": "1000",
+            "upgradePackages": "true"
+        }
+    },
+    "remoteUser": "nutanix"
+}
