@@ -1,0 +1,36 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "plugin": [
+        "opencode-models-discovery@latest"
+    ],
+    "provider": {
+        "anthropic": {
+            "whitelist": [
+                "claude-sonnet-5",
+                "claude-fable-5",
+                "claude-opus-5"
+            ],
+            "options": {
+                "headers": {
+                    "Authorization": "Bearer {env:ANTHROPIC_API_KEY}"
+                },
+                "apiKey": ""
+            }
+        },
+        "nai": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "Nutanix Enterprise AI",
+            "options": {
+                "baseURL": "{env:OPENAI_API_BASE_URL}",
+                "apiKey": "{env:OPENAI_API_KEY}",
+                "modelsDiscovery": {
+                    "enabled": true
+                }
+            }
+        }
+    },
+    "enabled_providers": [
+        "nai",
+        "anthropic"
+    ]
+}
