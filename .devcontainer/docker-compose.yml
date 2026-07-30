@@ -1,5 +1,10 @@
 name: nai-tutorials
 
+x-common-env: &common-env
+  REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt
+
 x-common-env-file: &common-env-file
   env_file:
     - path: ../.env
@@ -25,9 +30,11 @@ services:
       - /run:rw,nosuid,nodev,noexec
       - /home/nutanix/.config:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
       - /home/nutanix/.cache:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
-      - /home/nutanix/.local/share:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
-      - /home/nutanix/.local/state:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
-      - /var/devcontainer:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.local:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.npm:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.devcontainer:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /home/nutanix/.ssh:rw,nosuid,nodev,uid=1000,gid=1000,mode=0700
+      - /var/devcontainer:rw,nosuid,nodev
 
     volumes:
       - ..:/workspace:cached
@@ -35,15 +42,15 @@ services:
 
     <<: *common-env-file
     environment:
+      <<: *common-env
       OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX: "8192"
-      NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/nai-mitm-ca.crt
 
     networks:
       - nai-dev-network
 
     depends_on:
-      nginx:
-        condition: service_started
+      open-webui:
+        condition: service_healthy
 
   open-webui:
     build:
@@ -59,12 +66,12 @@ services:
 
     <<: *common-env-file
     environment:
+      <<: *common-env
       WEBUI_AUTH: "False"
       ENABLE_OLLAMA_API: "False"
       HF_HUB_OFFLINE: 1
       OPENAI_API_BASE_URL: https://api.anthropic.com/v1
       # ENABLE_PERSISTENT_CONFIG: "False"
-      # DEFAULT_USER_ROLE: "admin"
 
     networks:
       - nai-dev-network
@@ -81,8 +88,6 @@ services:
       - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./certificates/api.anthropic.com.crt:/etc/nginx/tls/api.anthropic.com.crt:ro
       - ./certificates/api.anthropic.com.key:/etc/nginx/tls/api.anthropic.com.key:ro
-
-    <<: *common-env-file
 
     environment:
       NGINX_ENVSUBST_FILTER: "^(ANTHROPIC_UPSTREAM_URL|ANTHROPIC_UPSTREAM_HOST)$"
