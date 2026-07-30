@@ -26,7 +26,7 @@ Launch **Rancher Desktop** and ensure these settings are set before opening VS C
 * Go to **Preferences** ➔ **Kubernetes**.
 * **Uncheck "Enable Kubernetes"** *(Frees up RAM and CPU)*.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │ Rancher Desktop Preferences                             │
 ├─────────────────────────────────────────────────────────┤
@@ -45,6 +45,7 @@ Launch **Rancher Desktop** and ensure these settings are set before opening VS C
 * Go to **Preferences** ➔ **Application** ➔ **Environment / Supporting Utilities** ➔ **Automatic**.
 
 ### 3. Elevated Privileges
+
 * Go to **Preferences** ➔ **Application** ➔ **General**
 * Enable **Administrative Access / Symlinks** so `docker` CLI commands work globally.
 
@@ -57,6 +58,8 @@ Launch **Rancher Desktop** and ensure these settings are set before opening VS C
 Click the link below to clone and open directly in VS Code:
 
 👉 **[![Launch Environment in VS Code](https://img.shields.io/static/v1?label=Dev%20Container\&message=Open%20in%20VS%20Code\&color=007ACC\&logo=visualstudiocode\&logoColor=white)](https://vscode.dev/redirect?url=vscode://vscode.git/clone?url=https://github.com/nutanixdev/nai-tutorials)**
+
+> **Note:** After selecting a local folder to clone the repository, you are prompted if you would like to open the repository, click **Open** twice. After this, click **"Reopen in Container"** when prompted in the bottom-right corner.
 
 ### Option 2: Manual VS Code Setup
 
@@ -87,7 +90,7 @@ Click the link below to clone and open directly in VS Code:
 
 Look at the **bottom-left corner** of VS Code. When the build finishes, you will see a blue/green badge:
 
-```
+```text
 [><] Dev Container: Nutanix AI Lab
 
 ```
