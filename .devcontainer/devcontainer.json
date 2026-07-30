@@ -28,6 +28,8 @@
         }
     },
     "remoteUser": "nutanix",
+    "updateRemoteUserUID": false,
+    "userEnvProbe": "none",
     "initializeCommand": [
         "docker",
         "compose",
@@ -36,5 +38,6 @@
         "run",
         "--rm",
         "certificate-generator"
-    ]
+    ],
+    "postCreateCommand": ".devcontainer/post-create.sh"
 }
