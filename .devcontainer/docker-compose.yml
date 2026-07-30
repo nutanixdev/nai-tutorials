@@ -30,13 +30,40 @@ services:
 
     volumes:
       - ..:/workspace:cached
-      - ./certificates/ca.crt:/usr/local/share/ca-certificates/nai-mitm-ca.crt:ro
       - vscode-server-data:/home/nutanix/.vscode-server
 
     <<: *common-env-file
     environment:
       OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX: "8192"
       NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/nai-mitm-ca.crt
+
+    networks:
+      - nai-dev-network
+
+    depends_on:
+      nginx:
+        condition: service_started
+
+  open-webui:
+    build:
+      context: .
+      dockerfile: open-webui/Dockerfile
+    restart: unless-stopped
+
+    expose:
+      - "8080"
+
+    volumes:
+      - open-webui-data:/app/backend/data
+
+    <<: *common-env-file
+    environment:
+      WEBUI_AUTH: "False"
+      ENABLE_OLLAMA_API: "False"
+      HF_HUB_OFFLINE: 1
+      OPENAI_API_BASE_URL: https://api.anthropic.com/v1
+      # ENABLE_PERSISTENT_CONFIG: "False"
+      # DEFAULT_USER_ROLE: "admin"
 
     networks:
       - nai-dev-network
@@ -72,3 +99,4 @@ networks:
 
 volumes:
   vscode-server-data:
+  open-webui-data:

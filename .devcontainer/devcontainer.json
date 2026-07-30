@@ -5,8 +5,18 @@
     "workspaceFolder": "/workspace",
     "runServices": [
         "opencode",
+        "open-webui",
         "nginx"
     ],
+    "forwardPorts": [
+        "open-webui:8080"
+    ],
+    "portsAttributes": {
+        "8080": {
+            "label": "Open WebUI",
+            "onAutoForward": "notify"
+        }
+    },
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "version": "2.5.9",
