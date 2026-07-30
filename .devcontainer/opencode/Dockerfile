@@ -25,7 +25,8 @@ RUN install -d -o 1000 -g 1000 -m 0755 \
     /home/${REMOTE_USER}/.config \
     /home/${REMOTE_USER}/.cache \
     /home/${REMOTE_USER}/.local/share \
-    /home/${REMOTE_USER}/.local/state
+    /home/${REMOTE_USER}/.local/state \
+    /var/devcontainer
 
 COPY opencode/apply-security.sh /tmp/apply-security.sh
 RUN chmod +x /tmp/apply-security.sh \

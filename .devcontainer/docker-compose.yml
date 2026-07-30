@@ -27,6 +27,7 @@ services:
       - /home/nutanix/.cache:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
       - /home/nutanix/.local/share:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
       - /home/nutanix/.local/state:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
+      - /var/devcontainer:rw,nosuid,nodev,uid=1000,gid=1000,mode=0755
 
     volumes:
       - ..:/workspace:cached
