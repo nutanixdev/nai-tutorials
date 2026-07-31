@@ -15,7 +15,7 @@ A pre-configured AI lab environment using VS Code Dev Containers to learn Nutani
 Install these tools before proceeding:
 
 1. **[Visual Studio Code](https://code.visualstudio.com/)**
-2. **[VS Code Dev Containers Extension](vscode:extension/ms-vscode-remote.vscode-remote-extensionpack)**
+2. **[VS Code Dev Containers Extension](https://vscode.dev/redirect?url=vscode:extension/ms-vscode-remote.vscode-remote-extensionpack)**
 3. **[Rancher Desktop](https://rancherdesktop.io/)** (Tested container engine)
 
 > **Note:** If you are a Nutanix employee, connect to the VPN.
