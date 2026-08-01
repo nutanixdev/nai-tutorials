@@ -5,11 +5,6 @@ x-common-env: &common-env
   SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
   NODE_EXTRA_CA_CERTS: /etc/ssl/certs/ca-certificates.crt
 
-x-common-env-file: &common-env-file
-  env_file:
-    - path: ../.env
-      required: false
-
 services:
   opencode:
     build:
@@ -40,7 +35,6 @@ services:
       - ..:/workspace:cached
       - vscode-server-data:/home/nutanix/.vscode-server
 
-    <<: *common-env-file
     environment:
       <<: *common-env
       OPENCODE_EXPERIMENTAL_OUTPUT_TOKEN_MAX: "8192"
@@ -64,14 +58,13 @@ services:
     volumes:
       - open-webui-data:/app/backend/data
 
-    <<: *common-env-file
     environment:
       <<: *common-env
       WEBUI_AUTH: "False"
       ENABLE_OLLAMA_API: "False"
       HF_HUB_OFFLINE: 1
       OPENAI_API_BASE_URL: https://api.anthropic.com/v1
-      # ENABLE_PERSISTENT_CONFIG: "False"
+      ENABLE_PERSISTENT_CONFIG: "False"
 
     networks:
       - nai-dev-network

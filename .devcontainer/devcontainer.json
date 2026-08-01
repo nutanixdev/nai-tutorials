@@ -20,7 +20,7 @@
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "version": "2.5.9",
-            "installZsh": "true",
+            "installZsh": "false",
             "username": "nutanix",
             "userUid": "1000",
             "userGid": "1000",
@@ -39,5 +39,6 @@
         "--rm",
         "certificate-generator"
     ],
-    "postCreateCommand": ".devcontainer/post-create.sh"
+    "postCreateCommand": ".devcontainer/post-create.sh",
+    "postStartCommand": ".devcontainer/post-start.sh"
 }
