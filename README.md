@@ -72,7 +72,10 @@ Click the link below to clone and open directly in VS Code:
 3. Select **`Git: Clone`**
 4. Paste repository URL: **[https://github.com/nutanixdev/nai-tutorials.git](https://github.com/nutanixdev/nai-tutorials.git)**
 
-> **Note:** If you already cloned the repo locally, open the folder in VS Code and click **"Reopen in Container"** when prompted in the bottom-right corner.
+### After Initial Launch
+If you already cloned the repo locally, open the folder in VS Code and do a `git pull` to sync any upstream changes.
+
+Then, click **"Reopen in Container"** when prompted in the bottom-right corner. If not prompted, click on the `[><]` in the bottom left corner, and then click **"Reopen in Container"** in the menu that appears.
 
 ---
 
@@ -96,7 +99,6 @@ Look at the **bottom-left corner** of VS Code. When the build finishes, you will
 
 ```text
 [><] Dev Container: Nutanix Tutorials
-
 ```
 
 ---
