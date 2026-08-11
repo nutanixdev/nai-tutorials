@@ -1,0 +1,15 @@
+# Stop here for non-interactive shells.
+case $- in
+  *i*) ;;
+  *) return ;;
+esac
+
+# Enable direnv for interactive Bash shells.
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook bash)"
+fi
+
+# Check whether the devcontainer repository has an update.
+if [ -r /etc/devcontainer/check-repo-updates.sh ]; then
+  source /etc/devcontainer/check-repo-updates.sh
+fi

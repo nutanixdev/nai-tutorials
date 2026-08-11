@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -eu
 
-if [ -f .env-template ]; then
-    cp -f .env-template .env
+if [ -f .env.example ]; then
+    cp -f .env.example .env
 fi
