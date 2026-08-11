@@ -63,7 +63,7 @@ Click the link below to clone and open directly in VS Code:
 
 👉 **[![Launch Environment in VS Code](https://img.shields.io/static/v1?label=Dev%20Container\&message=Open%20in%20VS%20Code\&color=007ACC\&logo=visualstudiocode\&logoColor=white)](https://vscode.dev/redirect?url=vscode://vscode.git/clone?url=https://github.com/nutanixdev/nai-tutorials)**
 
-> **Note:** Select a local folder where to clone the repository. When prompted with opening the repository, click **Open** (maybe you need to do it twice). Click **"Reopen in Container"** when prompted in the bottom-right corner.
+> **Note:** Select a local folder where to clone the repository. When prompted to open the repository, click **Open** (maybe you need to do it twice). Click **"Reopen in Container"** when prompted in the bottom-right corner.
 
 ### Option 2: Manual VS Code Setup
 
