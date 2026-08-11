@@ -45,26 +45,17 @@ RUN addgroup -g "${REMOTE_GID}" "${REMOTE_USER}" \
         "/home/${REMOTE_USER}/.npm" \
         "/home/${REMOTE_USER}/.devcontainer" \
         /var/devcontainer \
-    && printf '%s\n' \
-        '# ~/.bashrc' \
-        '' \
-        '# Stop here for non-interactive shells.' \
-        'case $- in' \
-        '  *i*) ;;' \
-        '  *) return ;;' \
-        'esac' \
-        '' \
-        '# Enable direnv for interactive Bash shells.' \
-        'if command -v direnv >/dev/null 2>&1; then' \
-        '  eval "$(direnv hook bash)"' \
-        'fi' \
-        > "/home/${REMOTE_USER}/.bashrc" \
-    && chown "${REMOTE_USER}:${REMOTE_USER}" \
-        "/home/${REMOTE_USER}/.bashrc" \
-    && chmod 0444 \
-        "/home/${REMOTE_USER}/.bashrc" \
     && ln -sf /tmp/environment /etc/environment \
     && ln -sf /tmp/.gitconfig "/home/${REMOTE_USER}/.gitconfig"
+
+COPY --chown=${REMOTE_UID}:${REMOTE_GID} --chmod=0444 \
+    opencode/bashrc \
+    /home/${REMOTE_USER}/.bashrc
+
+RUN install -d -o root -g root -m 0755 /etc/devcontainer
+COPY --chown=root:root --chmod=0444 \
+    opencode/check-repo-updates.sh \
+    /etc/devcontainer/check-repo-updates.sh
 
 # 4. Apply Security & Validation
 COPY opencode/apply-security.sh /tmp/apply-security.sh
