@@ -32,5 +32,15 @@
     "enabled_providers": [
         "nai",
         "anthropic"
-    ]
+    ],
+    "mcp": {
+        "demo": {
+            "type": "remote",
+            "url": "https://nai-dev.hpoc.nutanix.com/enterpriseai/gateway/mcp/{env:MCP_CONNECTOR_NAME}",
+            "enabled": false,
+            "headers": {
+                "Authorization": "Bearer {env:MCP_API_KEY}"
+            }
+        }
+    }
 }
