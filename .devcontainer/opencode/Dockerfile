@@ -9,13 +9,7 @@ ARG REMOTE_GID=1000
 ENV SHELL=/bin/bash \
     XDG_DATA_HOME=/tmp/xdg-data
 
-# 2. Configuration & Certificate Setup
-RUN install -d -m 0755 /etc/opencode
-
-COPY --chown=root:root --chmod=0444 \
-    opencode/opencode.jsonc \
-    /etc/opencode/opencode.jsonc
-
+# 2. Certificate Setup
 ADD https://bucket.vpce-002716e23dd1396bb-wnlhx791.s3.us-west-2.vpce.amazonaws.com/hpoc-usw-file-hosting/Cisco-Secure-Access-Root-CA.crt \
     /usr/local/share/ca-certificates/cisco-secure-access.crt
 
@@ -57,7 +51,14 @@ COPY --chown=root:root --chmod=0444 \
     opencode/check-repo-updates.sh \
     /etc/devcontainer/check-repo-updates.sh
 
-# 4. Apply Security & Validation
+# 4. OpenCode Configuration
+RUN install -d -m 0755 /etc/opencode
+
+COPY --chown=root:root --chmod=0444 \
+    opencode/opencode.jsonc \
+    /etc/opencode/opencode.jsonc    
+
+# 5. Apply Security & Validation
 COPY opencode/apply-security.sh /tmp/apply-security.sh
 RUN chmod +x /tmp/apply-security.sh \
     && /tmp/apply-security.sh \

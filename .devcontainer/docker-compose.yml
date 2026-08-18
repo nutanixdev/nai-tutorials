@@ -63,8 +63,11 @@ services:
       WEBUI_AUTH: "False"
       ENABLE_OLLAMA_API: "False"
       HF_HUB_OFFLINE: 1
-      OPENAI_API_BASE_URL: https://api.anthropic.com/v1
+      OFFLINE_MODE: "True"
+      OPENAI_API_BASE_URLS: https://api.anthropic.com/v1;https://nai-dev.hpoc.nutanix.com/enterpriseai/gateway/v1
+      OPENAI_API_CONFIGS: '{"1": {"enable": false,"connection_type": "external","auth_type": "bearer"}}'
       ENABLE_PERSISTENT_CONFIG: "False"
+      TOOL_SERVER_CONNECTIONS: '[{"url": "https://nai-dev.hpoc.nutanix.com/enterpriseai/gateway/mcp/<your_initials>-mcp","path": "openapi.json","type": "mcp","auth_type": "bearer","headers": null,"key": "","config": {"enable": false,"function_name_filter_list": "","access_grants": []},"info": {"id": "<your_initials>-mcp","name": "<your_initials>-mcp","description": ""},"spec_type": "url","spec": ""}]'
 
     networks:
       - nai-dev-network
