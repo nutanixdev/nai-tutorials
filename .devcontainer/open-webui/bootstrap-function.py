@@ -42,7 +42,7 @@ async def main():
                 "content": content,
                 "meta": form.meta.model_dump(),
                 "type": "filter",
-                "is_active": True,
+                "is_active": False,
                 "is_global": True,
             },
         )
@@ -64,7 +64,7 @@ async def main():
         await Functions.update_function_by_id(
             FUNCTION_ID,
             {
-                "is_active": True,
+                "is_active": False,
                 "is_global": True,
             },
         )
