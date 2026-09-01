@@ -16,11 +16,20 @@ ADD https://bucket.vpce-002716e23dd1396bb-wnlhx791.s3.us-west-2.vpce.amazonaws.c
 COPY certificates/ca.crt \
     /usr/local/share/ca-certificates/nai-mitm-ca.crt
 
-RUN SSL_CERT_FILE=/usr/local/share/ca-certificates/cisco-secure-access.crt \
-    apk add --no-cache \
+# Bootstrap trust before apk can reach the package repositories.
+#
+# SSL_CERT_FILE *replaces* the trust store rather than extending it, so it must
+# also carry the public roots: pointing it at the Cisco root alone breaks the
+# build on any network that does not TLS-intercept this traffic (remote workers,
+# split tunnel), where the Alpine CDN serves its genuine Let's Encrypt chain.
+# The combined bundle works whether or not the build is intercepted.
+RUN cat /etc/ssl/certs/ca-certificates.crt \
+        /usr/local/share/ca-certificates/*.crt > /tmp/ca-bootstrap.crt \
+    && SSL_CERT_FILE=/tmp/ca-bootstrap.crt apk add --no-cache \
         bash \
         ca-certificates \
         direnv \
+    && rm -f /tmp/ca-bootstrap.crt \
     && update-ca-certificates
 
 # 3. User, Home Directories & Bash Configuration
